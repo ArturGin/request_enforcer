@@ -1,6 +1,12 @@
 # frozen_string_literal: true
 
+require "bundler/setup"
 require "request_enforcer"
+require "zeitwerk"
+
+loader = Zeitwerk::Loader.new
+loader.push_dir(File.expand_path("examples", __dir__))
+loader.setup
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
@@ -13,3 +19,4 @@ RSpec.configure do |config|
     c.syntax = :expect
   end
 end
+RSpec::Expectations.configuration.on_potential_false_positives = :nothing

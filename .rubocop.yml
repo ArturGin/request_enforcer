@@ -1,5 +1,12 @@
+require:
+  - rubocop-rspec
+
 AllCops:
-  TargetRubyVersion: 2.4
+  Exclude:
+    - bin/rake
+    - bin/rspec
+    - bin/rubocop
+    - vendor/**/*
 
 Style/StringLiterals:
   Enabled: true
@@ -9,5 +16,20 @@ Style/StringLiteralsInInterpolation:
   Enabled: true
   EnforcedStyle: double_quotes
 
+RSpec/NestedGroups:
+  Max: 5
+
 Layout/LineLength:
   Max: 120
+
+Layout/SpaceAroundMethodCallOperator:
+  Enabled: true
+
+RSpec/MultipleExpectations:
+  Max: 2
+
+Gemspec/RequiredRubyVersion:
+  Enabled: false
+
+RSpec/BeforeAfterAll:
+  Enabled: false
