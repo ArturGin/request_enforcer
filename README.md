@@ -15,7 +15,7 @@ That's the problem this gem is trying to solve. By specifying objects that are u
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'request_enforcer'
+gem "request_enforcer", git: 'https://github.com/ArturGin/request_enforcer'
 ```
 
 And then execute:
