@@ -9,8 +9,8 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Artur Gin"]
   spec.email         = ["art.rad.gin@proton.me"]
 
-  spec.summary       = "Enforce HTTP requests for your chosen for object"
-  spec.description   = "Enforce HTTP requests for your chosen for object"
+  spec.summary       = "Enforce HTTP requests through your chosen for object"
+  spec.description   = "Enforce HTTP requests through chosen for object"
 
   spec.homepage      = "https://github.com/ArturGin/request_enforcer"
   spec.license       = "MIT"
@@ -33,4 +33,5 @@ Gem::Specification.new do |spec|
   spec.add_dependency "sniffer", ">=0.5.0"
 
   spec.add_development_dependency "zeitwerk"
+  spec.add_development_dependency 'httparty'
 end
