@@ -1,8 +1,14 @@
 # RequestEnforcer
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/request_enforcer`. To experiment with that code, run `bin/console` for an interactive prompt.
+Enforce your API calls to use provided modules.
 
-TODO: Delete this and the text above, and describe your gem
+Here is the setup:
+Projected is developed by several generations of programmers who like to do things in their way. One of those things is interactions with APIs
+
+It is going great, so what if calls to external APIs are going through 3 different places? 
+The problem starts when this external API starts to change and starts introducing breaking changes. Then we need to refactor, but our API call logic is spread out across several modules and it is not obvious did you find all of them
+
+That's the problem this gem is trying to solve. By specifying objects that are used for calling an API we can have a more sustainable code base
 
 ## Installation
 
@@ -22,7 +28,27 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+This gem is written with Rails way in mind. If there is need for other web frameworks - shoot a PR!
+
+Add this example config in some file in `config/initializers/` 
+``` ruby
+if Rails.env.development? || Rails.env.test?
+	RequestEnforcer.config do |c|
+		c.enforce 'httpbingo.org', to_use: SomeClass
+		c.warning_level = :error
+		c.silence_console_requests = false
+	end
+end
+```
+
+`enforce` a host `to_use:` object
+> to_use accepts an array of Objects
+
+`warning_level` can be `:error`  or `:warning` 
+- Error raises an error
+- Warning writes to console
+
+`silence_console_requests` is boolean and silences error or warning if request is coming from console
 
 ## Development
 
@@ -32,7 +58,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/request_enforcer.
+Bug reports and pull requests are welcome on GitHub at https://github.com/ArturGin/request_enforcer.
 
 ## License
 
