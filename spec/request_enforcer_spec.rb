@@ -17,53 +17,53 @@ RSpec.describe RequestEnforcer do
       Sniffer.disable! # is this correct to put here?
     end
 
-    context "when http request is made in development env" do
-      context "when it was called from an enforced module" do
-        let(:enforced_object) { :ModuleTest }
-        let(:host) { "httpbingo.org" }
+    let(:raised_error_message) {
+      format(error_message, host: host, enforced_modules:[enforced_object], query: '/json')
+    }
 
-        it { expect(Sniffer).to be_enabled }
+    context "when it was called from an enforced module" do
+      let(:enforced_object) { :ModuleTest }
+      let(:host) { "httpbingo.org" }
 
-        it "doesnt not raise an error" do
-          expect { ModuleTest.test }.not_to raise_error(UnEnforcedModuleError, "TODO add proper errors")
-          expect(Sniffer.data).to be_empty
-        end
+      it { expect(Sniffer).to be_enabled }
+
+      it "doesnt not raise an error" do
+        expect { ModuleTest.test }.not_to raise_error(UnEnforcedModuleError)
+        expect(Sniffer.data).to be_empty
       end
+    end
 
-      context "when it was called from instance of a class" do
-        let(:enforced_object) { :ClassInstanceTest }
-        let(:host) { "httpbingo.org" }
+    context "when it was called from instance of a class" do
+      let(:enforced_object) { :ClassInstanceTest }
+      let(:host) { "httpbingo.org" }
 
-        it { expect(Sniffer).to be_enabled }
+      it { expect(Sniffer).to be_enabled }
 
-        it "doesnt not raise an error" do
-          expect { ClassInstanceTest.new.test }.not_to raise_error(UnEnforcedModuleError, "TODO add proper errors")
-          expect(Sniffer.data).to be_empty
-        end
+      it "doesnt not raise an error" do
+        expect { ClassInstanceTest.new.test }.not_to raise_error(UnEnforcedModuleError)
+        expect(Sniffer.data).to be_empty
       end
+    end
 
-      context "when it was called not from enforced object" do
-        let(:enforced_object) { :GamersRiseUp }
-        let(:host) { "httpbingo.org" }
+    context "when it was called not from enforced object" do
+      let(:enforced_object) { :GamersRiseUp }
+      let(:host) { "httpbingo.org" }
 
-        let(:error_message) do
-          "Error: httpbingo.org/json did not use enforced modules [:GamersRiseUp]! TODO PROPER ERROR"
-        end
+      it { expect(Sniffer).to be_enabled }
 
-        it { expect(Sniffer).to be_enabled }
-
-        it "raises an error" do
-          expect { ModuleRaiseError.test }.to raise_error(UnEnforcedModuleError, error_message)
-          expect(Sniffer.data).to be_empty
-        end
+      it "raises an error" do
+        expect { ModuleRaiseError.test }.to raise_error(UnEnforcedModuleError, raised_error_message)
+        expect(Sniffer.data).to be_empty
       end
+    end
 
-      context "when request enforcer is disabled" do
-        let(:enforced_object) { :GamersRiseUp }
-        let(:host) { "httpbingo.org" }
+    context 'and was disabled!' do
+      let(:enforced_object) { :GamersRiseUp }
+      let(:host) { "httpbingo.org" }
 
-        it "allows any request to be made" do
-        end
+      it 'allow any requests' do
+        described_class.disable!
+        expect { ModuleRaiseError.test }.not_to raise_error(UnEnforcedModuleError)
       end
     end
   end
@@ -72,8 +72,20 @@ RSpec.describe RequestEnforcer do
     it { expect(Sniffer).not_to be_enabled }
 
     it "doesnt procces any requests" do
-      expect { ModuleTest.test }.not_to raise_error(UnEnforcedModuleError, "TODO add proper errors")
+      expect { ModuleTest.test }.not_to raise_error(UnEnforcedModuleError)
       expect(Sniffer.data).to be_empty
+    end
+  end
+
+  describe "when RequestEnforced poorly" do
+    context "when warning level is wrong" do
+      it do 
+        expect do 
+          described_class.config { |c|
+            c.warning_level = :sbalto
+          }.to raise_error(Anyway::Config::ValidationError)
+        end
+      end
     end
   end
 end

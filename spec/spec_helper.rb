@@ -3,6 +3,7 @@
 require "bundler/setup"
 require "request_enforcer"
 require "zeitwerk"
+require 'request_enforcer/message_constructor'
 
 loader = Zeitwerk::Loader.new
 loader.push_dir(File.expand_path("examples", __dir__))
@@ -18,5 +19,7 @@ RSpec.configure do |config|
   config.expect_with :rspec do |c|
     c.syntax = :expect
   end
+
+  config.include RequestEnforcer::MessageConstructor
 end
 RSpec::Expectations.configuration.on_potential_false_positives = :nothing
