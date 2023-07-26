@@ -17,13 +17,7 @@ module RequestEnforcer
 
     def disable!
       @config = nil
-      @disabled = true
-      @enabled = false
       true
-    end
-
-    def enabled?
-      !@config.nil?
     end
   end
 end

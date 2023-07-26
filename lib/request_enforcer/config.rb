@@ -8,10 +8,10 @@ module RequestEnforcer
   class Config < Anyway::Config
     config_name :request_enforcer
 
-    attr_config env: %i[test developement],
-                warning_level: :error,
+    attr_config warning_level: :error,
                 enforced: {},
-                root: RequestEnforcer::Root.root
+                root: RequestEnforcer::Root.root,
+                silence_console_requests: true
 
     on_load :ensure_warning_level_is_correct,
             :set_sniffer
